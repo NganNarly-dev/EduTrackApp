@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#FF888888</color>
+    <color name="blue">#5AD0F7</color> <!--Mau chinh cho viec nhan manh noi dung-->
+    <color name="vien">#91E1FC</color>
+    <color name="xanh_nhat">#E2F8FF</color>
+    <color name="xanh">#ABE9FD</color>
 </resources>
