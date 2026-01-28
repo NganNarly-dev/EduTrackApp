@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,6 +75,7 @@ public class DetailedActivity extends AppCompatActivity {
     void setEven(){
         fix_button.setOnClickListener(v -> {
             Intent intent = new Intent(DetailedActivity.this, AddActivity.class);
+            intent.putExtra("index", 0);
             intent.putExtra("Title", add_title.getText().toString());
             intent.putExtra("timeStart", time_start.getText().toString());
             intent.putExtra("timeEnd", time_end.getText().toString());
@@ -82,6 +84,8 @@ public class DetailedActivity extends AppCompatActivity {
             startActivity(intent);
         });
         delete_button.setOnClickListener(v -> {
+            planList.remove(0);
+            Toast.makeText(DetailedActivity.this, "Đã xóa", Toast.LENGTH_SHORT).show();
             finish();
         });
         back_button.setOnClickListener(v -> {

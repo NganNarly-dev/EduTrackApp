@@ -28,6 +28,8 @@ public class AddActivity extends AppCompatActivity {
     private EditText add_time_end;
     private View icon_lich;
     private TextView lichText;
+    private int editIndex = -1;
+
 
 
     @Override
@@ -41,20 +43,26 @@ public class AddActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         Intent intent = getIntent();
+        if (intent == null) {
+            finish();
+            return;
+        }else{
+            editIndex = intent.getIntExtra("index", -1);
 
-        String title = intent.getStringExtra("Title");
-        String timeStart = intent.getStringExtra("timeStart");
-        String timeEnd = intent.getStringExtra("timeEnd");
-        String note_detail = intent.getStringExtra("note");
-        String date = intent.getStringExtra("date");
+            String title = intent.getStringExtra("Title");
+            String timeStart = intent.getStringExtra("timeStart");
+            String timeEnd = intent.getStringExtra("timeEnd");
+            String note_detail = intent.getStringExtra("note");
+            String date = intent.getStringExtra("date");
 
-        add_title.setText(title);
-        add_note.setText(note_detail);
-        add_time_start.setText(timeStart);
-        add_time_end.setText(timeEnd);
-        lichText.setText(date);
-
+            if (title != null) add_title.setText(title);
+            if (note_detail != null) add_note.setText(note_detail);
+            if (timeStart != null) add_time_start.setText(timeStart);
+            if (timeEnd != null) add_time_end.setText(timeEnd);
+            if (date != null) lichText.setText(date);
+        }
         setEven();
     }
     void finding(){
@@ -100,8 +108,16 @@ public class AddActivity extends AppCompatActivity {
             }
 
             Plan plan = new Plan(title, timeStart, timeEnd, note, date);
-            PlanManager.addPlan(plan);
-            Toast.makeText(this, "Đã thêm: " + title, Toast.LENGTH_SHORT).show();
+            if (editIndex >= 0 && PlanManager.getPlan(editIndex) != null) {
+                PlanManager.updatePlan(editIndex, plan);
+                Toast.makeText(this, "Đã cập nhật: " + title, Toast.LENGTH_SHORT).show();
+            } else {
+                PlanManager.addPlan(plan);
+                Toast.makeText(this, "Đã thêm: " + title, Toast.LENGTH_SHORT).show();
+            }
+            Intent result = new Intent();
+            result.putExtra("editedIndex", editIndex);
+            setResult(RESULT_OK, result);
             Intent intent = new Intent(AddActivity.this, MainActivity.class);
             startActivity(intent);
         });

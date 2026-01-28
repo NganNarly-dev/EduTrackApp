@@ -12,4 +12,15 @@ public class PlanManager {
     public static void addPlan(Plan plan) {
         planList.add(plan);
     }
+    public static void updatePlan(int index, Plan plan) {
+        if (index >= 0 && index < planList.size()) {
+            planList.set(index, plan);
+        }
+    }
+    public static Plan getPlan(int index) {
+        if (index >= 0 && index < planList.size()) {
+            return planList.get(index);
+        }
+        return null;
+    }
 }
