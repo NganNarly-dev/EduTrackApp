@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("timeStart", plan.getTimeStart());
             intent.putExtra("timeEnd", plan.getTimeEnd());
             intent.putExtra("note", plan.getNote());
+            intent.putExtra("date", plan.getDate());
             startActivity(intent);
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

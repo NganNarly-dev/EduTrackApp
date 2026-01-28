@@ -48,12 +48,13 @@ public class DetailedActivity extends AppCompatActivity {
         String timeStart = intent.getStringExtra("timeStart");
         String timeEnd = intent.getStringExtra("timeEnd");
         String note_detail = intent.getStringExtra("note");
+        String date = intent.getStringExtra("date");
         if (title == null || timeStart == null || timeEnd == null) {
             finish();
             return;
         }
         add_title.setText(title);
-        lich.setText("Thu, 22/01");
+        lich.setText(date);
         time_start.setText(timeStart);
         time_end.setText(timeEnd);
         note.setText(note_detail);
@@ -73,6 +74,11 @@ public class DetailedActivity extends AppCompatActivity {
     void setEven(){
         fix_button.setOnClickListener(v -> {
             Intent intent = new Intent(DetailedActivity.this, AddActivity.class);
+            intent.putExtra("Title", add_title.getText().toString());
+            intent.putExtra("timeStart", time_start.getText().toString());
+            intent.putExtra("timeEnd", time_end.getText().toString());
+            intent.putExtra("note", note.getText().toString());
+            intent.putExtra("date", lich.getText().toString());
             startActivity(intent);
         });
         delete_button.setOnClickListener(v -> {

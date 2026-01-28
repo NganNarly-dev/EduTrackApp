@@ -6,19 +6,20 @@ public class Plan {
     private String timeStart;
     private String timeEnd;
     private String note;
+    private String date;
 
 
-
-    public Plan(String title, String timeStart, String timeEnd, String note) {
+    public Plan(String title, String timeStart, String timeEnd, String note, String date) {
         this.title = title;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
         this.note = note;
+        this.date = date;
     }
 
     // Constructor không có note (để tương thích code cũ)
     public Plan(String title, String timeStart, String timeEnd) {
-        this(title, timeStart, timeEnd, "");
+        this(title, timeStart, timeEnd, "", "");
     }
 
     public String getTitle() {
@@ -52,4 +53,11 @@ public class Plan {
         this.note = note;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 }

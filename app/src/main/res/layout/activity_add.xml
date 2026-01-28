@@ -35,6 +35,8 @@
                 android:layout_marginTop="4dp"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:clickable="true"
+                android:focusable="true"
                 android:background="@drawable/icon_lich"
                 />
             <TextView
@@ -57,7 +59,7 @@
                 android:layout_height="24dp"
                 android:background="@drawable/icon__time"
                 />
-            <TextView
+            <EditText
                 android:id="@+id/time_start"
                 android:layout_marginStart="41dp"
                 android:layout_width="wrap_content"
@@ -72,7 +74,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginStart="40dp"
                 />
-            <TextView
+            <EditText
                 android:id="@+id/time_end"
                 android:layout_marginStart="41dp"
                 android:layout_width="wrap_content"
@@ -94,7 +96,7 @@
                 android:background="@drawable/icon_repeat"
                 />
             <TextView
-                android:id="@+id/lich"
+                android:id="@+id/repeat"
                 android:layout_marginStart="17dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
