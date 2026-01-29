@@ -7,6 +7,10 @@ public class Plan {
     private String timeEnd;
     private String note;
     private String date;
+    private boolean isCompleted = false;
+
+    public boolean isCompleted() { return isCompleted; }
+    public void setCompleted(boolean completed) { isCompleted = completed; }
 
 
     public Plan(String title, String timeStart, String timeEnd, String note, String date) {
@@ -15,6 +19,7 @@ public class Plan {
         this.timeEnd = timeEnd;
         this.note = note;
         this.date = date;
+        this.isCompleted = false;
     }
     public Plan(String title, String timeStart, String timeEnd) {
         this(title, timeStart, timeEnd, "", "");
@@ -58,4 +63,5 @@ public class Plan {
     public void setDate(String date) {
         this.date = date;
     }
+
 }

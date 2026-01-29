@@ -99,7 +99,7 @@ public class AddActivity extends AppCompatActivity {
             String note = add_note.getText().toString();
             String timeStart = add_time_start.getText().toString();
             String timeEnd = add_time_end.getText().toString();
-            String date = lichText.getText().toString();
+            String date = (String) lichText.getTag();
 
 
             if (title.isEmpty() || timeStart.isEmpty() || timeEnd.isEmpty()) {
@@ -129,9 +129,17 @@ public class AddActivity extends AppCompatActivity {
                 .build();
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            SimpleDateFormat sdf = new SimpleDateFormat("E, dd/MM", Locale.getDefault());
-            String date = sdf.format(new Date(selection));
-            lichText.setText(date);
+            SimpleDateFormat sdfSave = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            // Hiển thị dạng E, dd/MM cho user
+            SimpleDateFormat sdfDisplay = new SimpleDateFormat("E, dd/MM", Locale.getDefault());
+
+            String dateToSave = sdfSave.format(new Date(selection));
+            String dateToDisplay = sdfDisplay.format(new Date(selection));
+
+            // Hiển thị cho user
+            lichText.setText(dateToDisplay);
+            // Lưu tag để dùng khi save
+            lichText.setTag(dateToSave);
         });
         datePicker.show(getSupportFragmentManager(), "DATE_PICKER");
     }

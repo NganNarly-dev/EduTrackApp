@@ -42,11 +42,11 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        planList = PlanManager.getPlanList();
-        fullPlanList = new ArrayList<>(planList);
+        //planList = PlanManager.getPlanList();
+        fullPlanList = new ArrayList<>(PlanManager.getPlanList());
         filteredPlanList = new ArrayList<>();
         // Gắn adapter
-        adapter = new PlanAdapter(planList, plan -> {
+        adapter = new PlanAdapter(filteredPlanList, plan -> {
             // Xử lý khi item được click
             Intent intent = new Intent(MainActivity.this, DetailedActivity.class);
             intent.putExtra("Title", plan.getTitle());
@@ -126,10 +126,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fullPlanList = PlanManager.getPlanList();
+        fullPlanList.clear();
+        fullPlanList.addAll(PlanManager.getPlanList());
+
         if (currentSelectedDate != null) {
             filterPlansByDate(currentSelectedDate);
         } else {
+            filteredPlanList.clear();
+            filteredPlanList.addAll(fullPlanList);
             adapter.notifyDataSetChanged();
         }
     }
