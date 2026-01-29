@@ -12,14 +12,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.widget.Button;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
+    RecyclerView recyclerView1;
     List<Plan> planList;
     PlanAdapter adapter;
     private Button add_button;
+    private DayAdapter dayAdapter;
+    private int todayPosition = 0;
+    private String currentSelectedDate = null;
+    List<Plan> fullPlanList = new ArrayList<>();
+    List<Plan> filteredPlanList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         planList = PlanManager.getPlanList();
-
+        fullPlanList = new ArrayList<>(planList);
+        filteredPlanList = new ArrayList<>();
         // Gắn adapter
         adapter = new PlanAdapter(planList, plan -> {
             // Xử lý khi item được click
@@ -45,17 +56,85 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("date", plan.getDate());
             startActivity(intent);
         });
+        // Tạo danh sách ngày (15 ngày: 7 ngày trước + hôm nay + 7 ngày sau)
+        List<DayAdapter.DayItem> dayItems = buildDayList(7);
+        todayPosition = 7;
+        currentSelectedDate = dayItems.get(todayPosition).date;
+        // Khởi tạo DayAdapter
+        dayAdapter = new DayAdapter(dayItems, todayPosition, (position, day) -> {
+            currentSelectedDate = day.date;
+            filterPlansByDate(currentSelectedDate);
+        });
+
+        recyclerView1.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView1.setAdapter(dayAdapter);
+        recyclerView1.scrollToPosition(todayPosition);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        filterPlansByDate(currentSelectedDate);
 
         setEvent();
+    }
+    private List<DayAdapter.DayItem> buildDayList(int daysAround) {
+        List<DayAdapter.DayItem> list = new ArrayList<>();
+        SimpleDateFormat sdfDay = new SimpleDateFormat("EEE", Locale.ENGLISH);
+        SimpleDateFormat sdfNumber = new SimpleDateFormat("dd", Locale.getDefault());
+        SimpleDateFormat sdfFullDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, -daysAround);
+
+        for (int i = 0; i < daysAround * 2 + 1; i++) {
+            String dayName = sdfDay.format(cal.getTime());
+            String dayNumber = sdfNumber.format(cal.getTime());
+            String fullDate = sdfFullDate.format(cal.getTime());
+            list.add(new DayAdapter.DayItem(dayName, dayNumber, fullDate));
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        return list;
+    }
+    private void filterPlansByDate(String yyyyMMdd) {
+        if (yyyyMMdd == null) return;
+        filteredPlanList.clear();
+        for (Plan p : fullPlanList) {
+            String planDate = normalizePlanDate(p.getDate());
+            if (planDate != null && planDate.equals(yyyyMMdd)) {
+                filteredPlanList.add(p);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+    private String normalizePlanDate(String raw) {
+        if (raw == null) return null;
+        List<SimpleDateFormat> candidates = Arrays.asList(
+                new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()),
+                new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()),
+                new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        );
+        for (SimpleDateFormat fmt : candidates) {
+            try {
+                fmt.setLenient(false);
+                Date d = fmt.parse(raw);
+                if (d != null) {
+                    SimpleDateFormat out = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    return out.format(d);
+                }
+            } catch (ParseException ignored) {}
+        }
+        return null;
     }
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.notifyDataSetChanged();
+        fullPlanList = PlanManager.getPlanList();
+        if (currentSelectedDate != null) {
+            filterPlansByDate(currentSelectedDate);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
     }
     void finding(){
+        recyclerView1 = findViewById(R.id.recycler_view_day);
         recyclerView = findViewById(R.id.recycler_view_item);
         add_button = findViewById(R.id.add_button);
     }

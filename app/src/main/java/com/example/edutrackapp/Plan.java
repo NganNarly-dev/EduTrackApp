@@ -16,8 +16,6 @@ public class Plan {
         this.note = note;
         this.date = date;
     }
-
-    // Constructor không có note (để tương thích code cũ)
     public Plan(String title, String timeStart, String timeEnd) {
         this(title, timeStart, timeEnd, "", "");
     }
