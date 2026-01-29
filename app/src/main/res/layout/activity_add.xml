@@ -114,6 +114,9 @@
             android:layout_height="90dp">
             <EditText
                 android:paddingStart="8dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:textSize="22sp"
                 android:id="@+id/note"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"

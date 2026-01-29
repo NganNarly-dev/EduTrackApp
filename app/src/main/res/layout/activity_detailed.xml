@@ -100,10 +100,14 @@
             android:layout_width="match_parent"
             android:layout_height="90dp">
             <TextView
+                android:id="@+id/note"
                 android:paddingTop="8dp"
                 android:paddingStart="8dp"
-                android:id="@+id/note"
-                android:textSize="16sp"
+                android:paddingBottom="12dp"
+                android:layout_marginEnd="8dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textSize="22sp"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:background="@drawable/bg_note"
@@ -115,7 +119,7 @@
         app:layout_constraintTop_toBottomOf="@+id/add_note"
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-
+        android:layout_marginEnd="2dp"
         android:layout_height="wrap_content">
         <FrameLayout
             android:layout_width="wrap_content"
@@ -143,15 +147,15 @@
                 android:id="@+id/delete_button"
                 android:layout_width="170dp"
                 android:layout_height="52dp"
-                android:background="@drawable/button_save"
-                android:layout_marginStart="15dp"
+                android:background="@drawable/button_delete"
+                android:layout_marginStart="8dp"
                 app:backgroundTint="@null"
                 />
             <View
                 android:id="@+id/icon_delete"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginStart="91dp"
+                android:layout_marginStart="86dp"
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/icon__delete"
                 android:layout_marginTop="14dp"/>
