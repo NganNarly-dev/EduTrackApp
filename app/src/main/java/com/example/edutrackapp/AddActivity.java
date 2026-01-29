@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -161,7 +162,7 @@ public class AddActivity extends AppCompatActivity {
             add_time_end.setText("");
         });
         cancel_button.setOnClickListener(v -> {
-            finish();
+            showCancelConfirmationDialog();
         });
         icon_lich.setOnClickListener(v -> {
             showCalendarDialog(lichText);
@@ -201,6 +202,18 @@ public class AddActivity extends AppCompatActivity {
             Intent intent = new Intent(AddActivity.this, MainActivity.class);
             startActivity(intent);
         });
+    }
+    private void showCancelConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận hủy")
+                .setMessage("Bạn có chắc muốn hủy? Dữ liệu chưa lưu sẽ bị mất.")
+                .setPositiveButton("Hủy", (dialog, which) -> {
+                    finish();
+                })
+                .setNegativeButton("Tiếp tục", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
     }
     private void showCalendarDialog(TextView lichText) {
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
