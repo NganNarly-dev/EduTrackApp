@@ -35,11 +35,6 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
         Plan plan = planList.get(position);
         holder.tvTitle.setText(plan.getTitle());
         holder.tvTime.setText(plan.getTimeStart() + " - " + plan.getTimeEnd());
-//        holder.itemView.setOnClickListener(v -> {
-//            if (listener != null) {
-//                listener.onItemClick(plan);
-//            }
-//        });
         holder.customCheckBox.setOnCheckedChangeListener(null);
         holder.customCheckBox.setChecked(plan.isCompleted());
 
@@ -49,7 +44,6 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
             android.util.Log.d("PlanAdapter", "Checkbox " + plan.getTitle() + " = " + isChecked);
         });
         holder.itemView.setOnClickListener(v -> {
-            // Chỉ trigger khi click vào vùng ngoài checkbox
             if (listener != null) {
                 listener.onItemClick(plan);
             }

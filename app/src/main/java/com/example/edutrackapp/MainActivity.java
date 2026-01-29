@@ -11,6 +11,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 
 import java.text.ParseException;
@@ -73,8 +75,53 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         filterPlansByDate(currentSelectedDate);
-
+        setupDraggableButton(add_button);
         setEvent();
+    }
+
+    private void setupDraggableButton(View button) {
+        final float[] dX = {0};
+        final float[] dY = {0};
+        final float[] startX = {0};
+        final float[] startY = {0};
+        final boolean[] isDragging = {false};
+
+        button.setOnTouchListener((view, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    dX[0] = view.getX() - event.getRawX();
+                    dY[0] = view.getY() - event.getRawY();
+                    startX[0] = event.getRawX();
+                    startY[0] = event.getRawY();
+                    isDragging[0] = false;
+                    return true;
+
+                case MotionEvent.ACTION_MOVE:
+                    isDragging[0] = true;
+                    float newX = event.getRawX() + dX[0];
+                    float newY = event.getRawY() + dY[0];
+
+                    // Giới hạn trong màn hình
+                    View parent = (View) view.getParent();
+                    newX = Math.max(0, Math.min(newX, parent.getWidth() - view.getWidth()));
+                    newY = Math.max(0, Math.min(newY, parent.getHeight() - view.getHeight()));
+
+                    view.setX(newX);
+                    view.setY(newY);
+                    return true;
+
+                case MotionEvent.ACTION_UP:
+                    float deltaX = Math.abs(event.getRawX() - startX[0]);
+                    float deltaY = Math.abs(event.getRawY() - startY[0]);
+
+                    if (deltaX < 10 && deltaY < 10) {
+                        Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                        startActivity(intent);
+                    }
+                    return true;
+            }
+            return false;
+        });
     }
     private List<DayAdapter.DayItem> buildDayList(int daysAround) {
         List<DayAdapter.DayItem> list = new ArrayList<>();
@@ -102,6 +149,22 @@ public class MainActivity extends AppCompatActivity {
                 filteredPlanList.add(p);
             }
         }
+
+        // Sắp xếp theo thời gian bắt đầu (HH:mm) tăng dần
+        Collections.sort(filteredPlanList, new Comparator<Plan>() {
+            @Override
+            public int compare(Plan p1, Plan p2) {
+                String time1 = p1.getTimeStart().replace(":", "");
+                String time2 = p2.getTimeStart().replace(":", "");
+                try {
+                    int t1 = Integer.parseInt(time1);
+                    int t2 = Integer.parseInt(time2);
+                    return Integer.compare(t1, t2);
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
+            }
+        });
         adapter.notifyDataSetChanged();
     }
     private String normalizePlanDate(String raw) {
@@ -147,10 +210,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, DetailedActivity.class);
             startActivity(intent);
         });
-        add_button.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddActivity.class);
-            startActivity(intent);
-        });
+//        add_button.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, AddActivity.class);
+//            startActivity(intent);
+//        });
     }
 }
 

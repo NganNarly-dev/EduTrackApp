@@ -2,6 +2,8 @@ package com.example.edutrackapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +40,9 @@ public class AddActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add);
         finding();
+        addTimeFormatWatcher(add_time_start);
+        addTimeFormatWatcher(add_time_end);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.add), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -61,9 +66,76 @@ public class AddActivity extends AppCompatActivity {
             if (note_detail != null) add_note.setText(note_detail);
             if (timeStart != null) add_time_start.setText(timeStart);
             if (timeEnd != null) add_time_end.setText(timeEnd);
-            if (date != null) lichText.setText(date);
+            if (date != null) {
+                try {
+                    SimpleDateFormat sdfSave = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    SimpleDateFormat sdfDisplay = new SimpleDateFormat("E, dd/MM", Locale.getDefault());
+                    Date d = sdfSave.parse(date);
+                    if (d != null) {
+                        lichText.setText(sdfDisplay.format(d));
+                        lichText.setTag(date); // gán lại tag để lưu đúng định dạng
+                    }
+                } catch (Exception e) {
+                    lichText.setText(date); // fallback nếu lỗi
+                }
+            }
+
         }
         setEven();
+    }
+    private void addTimeFormatWatcher(EditText editText) {
+        editText.addTextChangedListener(new TextWatcher() {
+            private boolean isFormatting = false;
+            private int cursorPosition = 0;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (!isFormatting) {
+                    cursorPosition = start + after;
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isFormatting) return;
+                isFormatting = true;
+
+                // Loại bỏ các ký tự không phải số
+                String text = s.toString().replaceAll("[^0-9]", "");
+
+                // Giới hạn 4 số (HHmm)
+                if (text.length() > 4) {
+                    text = text.substring(0, 4);
+                }
+
+                // Tự động thêm dấu ":"
+                if (text.length() >= 3) {
+                    text = text.substring(0, 2) + ":" + text.substring(2);
+                }
+
+                // Set text mới
+                editText.setText(text);
+
+                // Đặt con trỏ ở cuối
+                int newCursorPos = text.length();
+                if (cursorPosition == 2 && text.length() >= 3) {
+                    newCursorPos = 3; // Nhảy qua dấu ":"
+                }
+                editText.setSelection(Math.min(newCursorPos, text.length()));
+
+                isFormatting = false;
+            }
+        });
+    }
+    private boolean isValidTime(String time) {
+        if (!time.matches("\\d{2}:\\d{2}")) return false;
+        String[] parts = time.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+        return hour >= 0 && hour < 24 && minute >= 0 && minute < 60;
     }
     void finding(){
         lichText = findViewById(R.id.lich);
@@ -104,6 +176,14 @@ public class AddActivity extends AppCompatActivity {
 
             if (title.isEmpty() || timeStart.isEmpty() || timeEnd.isEmpty()) {
                 Toast.makeText(AddActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!isValidTime(timeStart)) {
+                add_time_start.setError("Thời gian không hợp lệ (00:00 - 23:59)");
+                return;
+            }
+            if (!isValidTime(timeEnd)) {
+                add_time_end.setError("Thời gian không hợp lệ (00:00 - 23:59)");
                 return;
             }
 
