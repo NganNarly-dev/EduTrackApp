@@ -205,19 +205,19 @@ public class AddActivity extends AppCompatActivity {
     }
     private void showCancelConfirmationDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Xác nhận hủy")
-                .setMessage("Bạn có chắc muốn hủy? Dữ liệu chưa lưu sẽ bị mất.")
-                .setPositiveButton("Hủy", (dialog, which) -> {
+                .setTitle("Confirm cancellation")
+                .setMessage("Are you sure you want to cancel? Unsaved data will be lost.")
+                .setPositiveButton("Cancel", (dialog, which) -> {
                     finish();
                 })
-                .setNegativeButton("Tiếp tục", (dialog, which) -> {
+                .setNegativeButton("Continue", (dialog, which) -> {
                     dialog.dismiss();
                 })
                 .show();
     }
     private void showCalendarDialog(TextView lichText) {
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Chọn ngày")
+                .setTitleText("Choose a date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build();
 
