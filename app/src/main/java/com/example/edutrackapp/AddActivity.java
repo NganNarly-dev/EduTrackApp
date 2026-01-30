@@ -167,6 +167,9 @@ public class AddActivity extends AppCompatActivity {
         icon_lich.setOnClickListener(v -> {
             showCalendarDialog(lichText);
         });
+        lichText.setOnClickListener(v -> {
+            showCalendarDialog(lichText);
+        });
         save_button.setOnClickListener(v -> {
             String title = add_title.getText().toString().trim();
             String note = add_note.getText().toString();
@@ -185,6 +188,11 @@ public class AddActivity extends AppCompatActivity {
             }
             if (!isValidTime(timeEnd)) {
                 add_time_end.setError("Thời gian không hợp lệ (00:00 - 23:59)");
+                return;
+            }
+            if (!isTimeStartBeforeTimeEnd(timeStart, timeEnd)) {
+                add_time_end.setError("Thời gian kết thúc phải sau thời gian bắt đầu");
+                Toast.makeText(AddActivity.this, "Thời gian kết thúc phải lớn hơn thời gian bắt đầu", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -235,6 +243,20 @@ public class AddActivity extends AppCompatActivity {
             lichText.setTag(dateToSave);
         });
         datePicker.show(getSupportFragmentManager(), "DATE_PICKER");
+    }
+    private boolean isTimeStartBeforeTimeEnd(String timeStart, String timeEnd) {
+        String[] startParts = timeStart.split(":");
+        String[] endParts = timeEnd.split(":");
+
+        int startHour = Integer.parseInt(startParts[0]);
+        int startMinute = Integer.parseInt(startParts[1]);
+        int endHour = Integer.parseInt(endParts[0]);
+        int endMinute = Integer.parseInt(endParts[1]);
+
+        int startTotalMinutes = startHour * 60 + startMinute;
+        int endTotalMinutes = endHour * 60 + endMinute;
+
+        return startTotalMinutes < endTotalMinutes;
     }
 
 }

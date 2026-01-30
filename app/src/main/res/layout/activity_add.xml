@@ -44,7 +44,7 @@
                 android:layout_marginStart="17dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thu, 22/01"
+                android:hint="Date"
                 android:textSize="24dp"
                 />
         </LinearLayout>
@@ -87,50 +87,30 @@
                 android:maxLength="5"
                 />
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/chon_repeat"
-            android:layout_marginTop="168dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <View
-                android:id="@+id/icon_repeat"
-                android:layout_marginTop="4dp"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/icon_repeat"
-                />
-            <TextView
-                android:id="@+id/repeat"
-                android:layout_marginStart="17dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No repeat"
-                android:textSize="24dp"
-                />
-        </LinearLayout>
         <FrameLayout
-            android:layout_marginTop="223dp"
+            android:layout_marginTop="190dp"
             android:layout_width="match_parent"
-            android:layout_height="90dp">
+            android:layout_height="120dp">
+
             <EditText
-                android:paddingStart="8dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:textSize="22sp"
                 android:id="@+id/note"
                 android:layout_width="match_parent"
-                android:layout_height="90dp"
+                android:layout_height="120dp"
                 android:background="@drawable/bg_note"
-                />
-            <View
-                android:id="@+id/icon_note"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="290dp"
-                android:layout_marginEnd="2dp"
-                android:background="@drawable/icon__note"
-                android:layout_marginTop="12dp"/>
+                android:paddingStart="8dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textSize="22sp" />
         </FrameLayout>
+        <View
+            android:id="@+id/icon_note"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="320dp"
+            android:layout_marginTop="196dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/icon__note" />
     </FrameLayout>
     <LinearLayout
         android:id="@+id/button_save_cancel"
@@ -141,24 +121,24 @@
         android:layout_height="wrap_content">
         <Button
             android:id="@+id/cancel_button"
-            android:layout_width="170dp"
-            android:layout_height="52dp"
+            android:layout_width="180dp"
+            android:layout_height="48dp"
             android:text="Cancel"
             android:textColor="@color/black"
             android:textSize="24sp"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="0dp"
             android:background="@drawable/button_cancel"
             app:backgroundTint="@null"
             />
         <Button
             android:id="@+id/save_button"
-            android:layout_width="170dp"
-            android:layout_height="52dp"
+            android:layout_width="180dp"
+            android:layout_height="48dp"
             android:text="Save"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:background="@drawable/button_save"
-            android:layout_marginStart="33dp"
+            android:layout_marginStart="20dp"
             app:backgroundTint="@null"
             />
     </LinearLayout>
